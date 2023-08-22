@@ -1,17 +1,29 @@
 use macroquad::prelude::*;
+use crate::solver::Solver;
 
-#[macroquad::main("BasicShapes")]
+pub mod solver;
+pub mod verlet;
+
+
+#[macroquad::main("Physics2D")]
 async fn main() {
+
+    let mut solver = Solver::new();
+
+    for _ in 1..2{
+        solver.add_verlet(
+            verlet::VerletObject::new(
+                Vec2::new(
+                    screen_width()/2.0+200.0, 
+                    screen_height()/2.0
+                )
+            )
+        );
+    }
+
     loop {
         clear_background(BLACK);
-
-        draw_circle(screen_width() /2.0, screen_height() /2.0, 15.0, YELLOW);
-
-        //define floor
-        let thickness = 3.0;
-        let vertical_buffer = 50.0;
-        draw_line(0.0, screen_height()-vertical_buffer, screen_width(), screen_height()-vertical_buffer, thickness, BLUE);
-
+        solver.update();
         next_frame().await
     }
 }
