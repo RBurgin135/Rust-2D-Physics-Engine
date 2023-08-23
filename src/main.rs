@@ -9,21 +9,15 @@ pub mod verlet;
 async fn main() {
 
     let mut solver = Solver::new();
-
-    for _ in 1..2{
-        solver.add_verlet(
-            verlet::VerletObject::new(
-                Vec2::new(
-                    screen_width()/2.0+200.0, 
-                    screen_height()/2.0
-                )
-            )
-        );
-    }
+    let mut t = 0;
 
     loop {
         clear_background(BLACK);
-        solver.update();
+        if t %5 == 0{
+            solver.generate_verlet();
+        }
+        solver.update(1);
+        t+=1;
         next_frame().await
     }
 }

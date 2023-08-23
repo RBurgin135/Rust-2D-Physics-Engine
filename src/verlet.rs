@@ -1,40 +1,40 @@
 use macroquad::prelude::*;
 
 pub struct VerletObject{
-    pub current_position: Vec2,
-    pub previous_position: Vec2,
-    pub acceleration: Vec2,
+    pub cur_pos: Vec2,
+    pub prev_pos: Vec2,
+    pub acc: Vec2,
     colour: Color,
     pub radius: f32
 } impl VerletObject{
 
-    pub fn new(pos: Vec2) -> VerletObject {
+    pub fn new(pos: Vec2, rad: f32, acc:Vec2, colour: Color) -> VerletObject {
         VerletObject{
-            current_position: pos,
-            previous_position: pos,
-            acceleration: Vec2::ZERO,
-            colour: RED,
-            radius: 10.0
+            cur_pos: pos,
+            prev_pos: pos,
+            acc: acc,
+            colour: colour,
+            radius: rad
         }
     }
 
     pub fn draw(&self){
         draw_circle(
-            self.current_position.x, 
-            self.current_position.y, 
+            self.cur_pos.x, 
+            self.cur_pos.y, 
             self.radius, 
             self.colour);
     }
 
     pub fn update_position(&mut self, dt: f32){
-        let vel = self.current_position - self.previous_position;
-        self.previous_position = self.current_position;
+        let vel = self.cur_pos - self.prev_pos;
+        self.prev_pos = self.cur_pos;
         
-        self.current_position += vel + self.acceleration * (dt * dt);
-        self.acceleration = Vec2::ZERO;
+        self.cur_pos += vel + self.acc * (dt * dt);
+        self.acc = Vec2::ZERO;
     }
 
     pub fn accelerate(&mut self, acc: Vec2){
-        self.acceleration += acc;
+        self.acc += acc;
     }
 }
